@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="goNext()">go</button>
+
+    <p>SIGN UP: </p>
+    <input id="ussign"/>
+    <input id="pwsign" type="password"/>
+    <button onclick="signup()">SIGN UP</button>
+
+    <p>LOG IN: </p>
+    <input id="uslog"/>
+    <input id="pwlog" type="password"/>
+    <button onclick="login()">LOG IN</button>
+
+    <p>the response from backend: </p>
+    <p id="response">Response goes here...</p>
+
+    <p>the token is...: </p>
+    <p id="token">token placeholder</p>
+
+    <button onclick="dowehavetoken()">GET SECRET</button>
+    <p>SECRET: </p>
+    <p id="secret">secret will go here</p>
+
+    <p>Type a message, send to database</p>
+    <input id="usermsg"/>
+    <button onclick="sendmsg()">Send Message</button>
+
+    <p id="resultfrommsg">msg result here</p>
+
+    <script>
+        let token = null; 
+
+        function goNext() {
+            window.location.href = "/other";
+        }
+
+        async function sendmsg() {
+            const msg = usermsg.value; 
+
+
+            const result = await fetch("http://localhost:3003/msg", {
+                method: "POST",
+                headers: { "Content-type": "application/json"},
+                body: JSON.stringify({msg})
+            });
+
+            const data = await result.json(); 
+            document.getElementById("resultfrommsg").innerText = JSON.stringify(data, null, 2);
+
+        }
+
+        async function signup() {
+            const user = ussign.value; 
+            const pw = pwsign.value;
+
+            // getting the token now
+            // by posting
+
+            // we already specified all our get post whatever in one controller
+            const result = await fetch("http://localhost:3003/users", {
+                method: "POST",
+                headers: { "Content-type": "application/json"},
+                body: JSON.stringify({user, pw})
+            });
+
+            const json_format = await result.json(); // transform it to json
+            document.getElementById("response").innerText = JSON.stringify(json_format, null, 2);
+
+        }
+
+        async function login() {
+            const user = uslog.value; 
+            const pw = pwlog.value;
+
+            const result = await fetch("http://localhost:3003/users", {
+                method: "POST",
+                headers: { "Content-type": "application/json"},
+                body: JSON.stringify({user, pw})
+            });
+
+            const json_format = await result.json();
+            document.getElementById("response").innerText = JSON.stringify(json_format, null, 2);
+            token = json_format.token;
+            document.getElementById("token").innerText = JSON.stringify(token, null, 2);
+        }
+
+
+        async function dowehavetoken() {
+            if (!token) {
+                // alerts r cool
+                alert("No token");
+                return; 
+            }
+
+            // ok let's pass in the token
+            const result = await fetch("http://localhost:3003/special_access", {
+                headers: {
+                    "Authorization":  `Bearer ${token}`
+                }
+                // this header will get parsed 
+            }); 
+
+             const json_format = await result.json();
+            secret.innerText = JSON.stringify(json_format.user, null, 2); 
+            
+        }
+
+
+    </script>
+</body>
+</html>
