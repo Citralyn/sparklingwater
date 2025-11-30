@@ -45,7 +45,7 @@
             const msg = usermsg.value; 
 
 
-            const result = await fetch("http://localhost:3003/msg", {
+            const result = await fetch("/msg", {
                 method: "POST",
                 headers: { "Content-type": "application/json"},
                 body: JSON.stringify({msg})
@@ -64,7 +64,7 @@
             // by posting
 
             // we already specified all our get post whatever in one controller
-            const result = await fetch("http://localhost:3003/users", {
+            const result = await fetch("/users", {
                 method: "POST",
                 headers: { "Content-type": "application/json"},
                 body: JSON.stringify({user, pw})
@@ -79,7 +79,7 @@
             const user = uslog.value; 
             const pw = pwlog.value;
 
-            const result = await fetch("http://localhost:3003/users", {
+            const result = await fetch("/users", {
                 method: "POST",
                 headers: { "Content-type": "application/json"},
                 body: JSON.stringify({user, pw})
@@ -100,7 +100,7 @@
             }
 
             // ok let's pass in the token
-            const result = await fetch("http://localhost:3003/special_access", {
+            const result = await fetch("/special_access", {
                 headers: {
                     "Authorization":  `Bearer ${token}`
                 }
