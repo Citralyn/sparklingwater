@@ -41,7 +41,7 @@ pipeline {
             steps {
                 sh """ 
                     ssh -i $SSH_KEY -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << EOF
-cd $APP_PATH
+cd $APP_PATH/backend
 cat > .env <<EOT
 MONGO_URI=${MONGO_URI}
 JWT_SECRET=${JWT_SECRET}
@@ -56,7 +56,7 @@ EOF
                 sh """
                     # ssh into EC2, reinstall deps & restart app
                     ssh -i $SSH_KEY -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST '
-                        cd $APP_PATH &&
+                        cd $APP_PATH/backend &&
                         npm install &&
                         pm2 restart all || pm2 start server.js
                     '
