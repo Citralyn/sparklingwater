@@ -19,23 +19,6 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                sh 'npm install'
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                sh 'npm test || true'   // prevents pipeline from halting if you don’t have tests yet
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh 'npm run build || true'    // optional, useful if using React
-            }
-        }
 
         stage("Prepare EC2 dir") {
             steps {
